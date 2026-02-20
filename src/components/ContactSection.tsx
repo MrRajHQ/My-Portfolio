@@ -1,12 +1,36 @@
 import { useState } from "react";
-import { Mail, Github, Send } from "lucide-react";
+import { Mail, Github, Send, CheckCircle } from "lucide-react";
+import emailjs from "@emailjs/browser";
+
+const SERVICE_ID = "service_e7a0ab7";
+const TEMPLATE_ID = "template_ud0177o";
+const PUBLIC_KEY = "z906f1yOpwesrP2DY";
 
 const ContactSection = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    window.location.href = `mailto:raj.user123x@gmail.com?subject=Contact from ${form.name}&body=${form.message}`;
+    setSending(true);
+
+    try {
+      await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+        from_name: form.name,
+        from_email: form.email,
+        message: form.message,
+      }, PUBLIC_KEY);
+
+      setSent(true);
+      setForm({ name: "", email: "", message: "" });
+      setTimeout(() => setSent(false), 4000);
+    } catch (error) {
+      console.error("EmailJS error:", error);
+      alert("Failed to send message. Please try again.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -55,6 +79,7 @@ const ContactSection = () => {
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               className="w-full px-4 py-3 rounded-lg bg-background border border-border text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 transition-shadow"
               required
+              maxLength={100}
             />
             <input
               type="email"
@@ -63,6 +88,7 @@ const ContactSection = () => {
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               className="w-full px-4 py-3 rounded-lg bg-background border border-border text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 transition-shadow"
               required
+              maxLength={255}
             />
             <textarea
               placeholder="Your Message"
@@ -71,13 +97,26 @@ const ContactSection = () => {
               onChange={(e) => setForm({ ...form, message: e.target.value })}
               className="w-full px-4 py-3 rounded-lg bg-background border border-border text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 transition-shadow resize-none"
               required
+              maxLength={1000}
             />
             <button
               type="submit"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity"
+              disabled={sending}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
             >
-              <Send size={16} />
-              Send Message
+              {sent ? (
+                <>
+                  <CheckCircle size={16} />
+                  Message Sent!
+                </>
+              ) : sending ? (
+                "Sending..."
+              ) : (
+                <>
+                  <Send size={16} />
+                  Send Message
+                </>
+              )}
             </button>
           </form>
         </div>
