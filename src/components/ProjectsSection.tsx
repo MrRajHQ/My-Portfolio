@@ -1,33 +1,46 @@
+import projectSaas from "@/assets/project-saas.jpg";
+import projectCloud from "@/assets/project-cloud.jpg";
+import projectEcommerce from "@/assets/project-ecommerce.jpg";
+import projectAi from "@/assets/project-ai.jpg";
+import projectBanking from "@/assets/project-banking.jpg";
+import projectHealthcare from "@/assets/project-healthcare.jpg";
+
 const projects = [
   {
     title: "Enterprise SaaS Platform",
     description: "Full-stack SaaS application with real-time analytics, user management, and payment integration.",
     tags: ["React", "Node.js", "PostgreSQL", "AWS"],
+    image: projectSaas,
   },
   {
     title: "Cloud Infrastructure Dashboard",
     description: "Monitoring and management dashboard for cloud resources with automated scaling capabilities.",
     tags: ["TypeScript", "Python", "Docker", "Kubernetes"],
+    image: projectCloud,
   },
   {
     title: "E-Commerce Platform",
     description: "High-performance e-commerce solution handling thousands of concurrent users with secure payments.",
     tags: ["Next.js", "MongoDB", "Stripe", "Redis"],
+    image: projectEcommerce,
   },
   {
     title: "AI-Powered Analytics Tool",
     description: "Machine learning-driven analytics platform for business intelligence and data visualization.",
     tags: ["Python", "TensorFlow", "React", "D3.js"],
+    image: projectAi,
   },
   {
     title: "Mobile Banking App",
     description: "Secure banking application with biometric authentication and real-time transaction processing.",
     tags: ["React Native", "Node.js", "PostgreSQL"],
+    image: projectBanking,
   },
   {
     title: "Healthcare Management System",
     description: "HIPAA-compliant healthcare platform for patient records, scheduling, and telemedicine.",
     tags: ["TypeScript", "AWS", "GraphQL", "MongoDB"],
+    image: projectHealthcare,
   },
 ];
 
@@ -48,10 +61,13 @@ const ProjectsSection = () => {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, i) => (
             <div key={i} className="card-elevated group cursor-pointer">
-              <div className="w-full h-40 rounded-lg bg-secondary mb-4 flex items-center justify-center">
-                <span className="text-4xl font-bold font-heading text-muted-foreground/20">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
+              <div className="w-full h-44 rounded-lg overflow-hidden mb-4">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  loading="lazy"
+                />
               </div>
               <h3 className="font-semibold text-foreground font-heading mb-2 group-hover:text-accent transition-colors">
                 {project.title}
